@@ -1,5 +1,9 @@
+import logo from '../../Assets/mile1-assets/logo.svg';
 export default function Home () {
     return (
-        <h1>ana sayfa</h1>
+        <>
+        
+        <img src={logo}/>
+        </>
     )
 }
