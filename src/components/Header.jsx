@@ -33,7 +33,9 @@ export default function Header() {
       <Img src={teknolojikYemekler} />
       <Container>
         <nav>
-            <a>Ana Sayfa</a>
+            <a href="/">Ana Sayfa</a>
+            <span> - </span>
+            <a href="/order">Sipariş Oluştur</a>
         </nav>
       </Container>
     </HeaderSec>
