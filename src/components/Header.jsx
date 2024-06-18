@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import teknolojikYemekler from "../assets/teknolojikYemekler.svg";
 import { Nav, NavItem, NavLink } from "reactstrap";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 const HeaderSec = styled.header`
   box-sizing: border-box;
@@ -23,8 +24,18 @@ const Img = styled.img`
 const Container = styled.div`
   height: 30px;
   width: 600px;
-  border: 1px, solid, black;
   margin-bottom: 21px;
+  color:white;
+  
+`;
+const StyledLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+  font-weight: ${props => (props.active ? 'bold' : 'normal')};
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export default function Header() {
@@ -33,9 +44,9 @@ export default function Header() {
       <Img src={teknolojikYemekler} />
       <Container>
         <nav>
-            <a href="/">Ana Sayfa</a>
-            <span> - </span>
-            <a href="/order">Sipariş Oluştur</a>
+        <StyledLink to="/" active={location.pathname === '/'}>Ana Sayfa</StyledLink>
+        <span> - </span>
+        <StyledLink to="/order" active={location.pathname === '/order'}>Sipariş Oluştur</StyledLink>
         </nav>
       </Container>
     </HeaderSec>
