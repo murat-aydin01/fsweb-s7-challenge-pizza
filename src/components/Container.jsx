@@ -24,9 +24,9 @@ const DivItem = styled.div`
 `;
 
 const InnerDiv = styled.div`
-display:flex;
-flex-direction:column;
-`
+  display: flex;
+  flex-direction: column;
+`;
 
 const OrderName = styled.h2`
   /* Position Absolute Acı Pizza */
@@ -44,12 +44,12 @@ const Price = styled.h3`
 `;
 
 const Select = styled.h4`
-/* Ek Malzemeler */
-font-weight: 600;
-font-size: 20px;
-line-height: 25px;
-color: #292929;
-`
+  /* Ek Malzemeler */
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 25px;
+  color: #292929;
+`;
 
 const Span = styled.span`
   /* 4.9 */
@@ -72,7 +72,7 @@ function Container() {
       <DivItem>
         <OrderName>Position Absolute Acı Pizza</OrderName>
       </DivItem>
-      
+
       <DivItem>
         <Price>85.50₺</Price>
         <Span>4.9</Span>
@@ -88,24 +88,35 @@ function Container() {
       </DivItem>
 
       <DivItem>
-        <Select>Boyut Seç</Select>
-        <FormGroup check>
-          <Input name="radio1" type="radio" />{" "}
-          <Label check>
-            Option one is this and that—be sure to include why it‘s great
-          </Label>
-        </FormGroup>
-        <FormGroup check>
-          <Input name="radio1" type="radio" />{" "}
-          <Label check>
-            Option two can be something else and selecting it will deselect
-            option one
-          </Label>
-        </FormGroup>
-        <FormGroup check disabled>
-          <Input disabled name="radio1" type="radio" />{" "}
-          <Label check>Option three is disabled</Label>
-        </FormGroup>
+        <InnerDiv>
+          <Select>Boyut Seç</Select>
+          <FormGroup check>
+            <Input name="radio1" type="radio" />
+            <Label check>Option one</Label>
+          </FormGroup>
+          <FormGroup check>
+            <Input name="radio1" type="radio" />
+            <Label check>Option two</Label>
+          </FormGroup>
+          <FormGroup check disabled>
+            <Input disabled name="radio1" type="radio" />{" "}
+            <Label check>Option three is disabled</Label>
+          </FormGroup>
+        </InnerDiv>
+
+        <InnerDiv>
+          <Select>Hamur Seç</Select>
+          <FormGroup>
+            <Label for="exampleSelect">Select</Label>
+            <Input id="exampleSelect" name="select" type="select">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </Input>
+          </FormGroup>
+        </InnerDiv>
       </DivItem>
       <DivItem></DivItem>
       <DivItem></DivItem>
