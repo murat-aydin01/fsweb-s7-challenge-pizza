@@ -31,7 +31,7 @@ const Container = styled.div`
 const StyledLink = styled(Link)`
   color: white;
   text-decoration: none;
-  font-weight: ${props => (props.active ? 'bold' : 'normal')};
+  font-weight: ${props => (props.$active ? 'bold' : 'normal')};
 
   &:hover {
     text-decoration: underline;
@@ -44,9 +44,9 @@ export default function Header() {
       <Img src={teknolojikYemekler} />
       <Container>
         <nav>
-        <StyledLink to="/" active={location.pathname === '/'}>Ana Sayfa</StyledLink>
+        <StyledLink to="/" $active={location.pathname === '/'}>Ana Sayfa</StyledLink>
         <span> - </span>
-        <StyledLink to="/order" active={location.pathname === '/order'}>Sipariş Oluştur</StyledLink>
+        <StyledLink to="/order" $active={location.pathname === '/order'}>Sipariş Oluştur</StyledLink>
         </nav>
       </Container>
     </HeaderSec>
