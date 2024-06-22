@@ -79,6 +79,13 @@ const Select = styled.h4`
   color: #292929;
 `;
 
+const Warning = styled.span`
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+  color: #ce2829;
+`;
+
 const Span = styled.span`
   font-size: 1rem;
   font-weight: 400;
@@ -104,7 +111,7 @@ const Secimler = styled.p`
 `;
 
 const Toplam = styled(Secimler)`
-  color: red;
+  color: #ce2829;
 `;
 
 const CounterInput = styled(Input)`
@@ -178,7 +185,7 @@ function Container() {
   function handleChange(event) {
     const { value, name, type, checked } = event.target;
     let oldValue = form.malzemeler;
-    if (type == "checkbox") {
+    if (name == "malzemeler") {
       if (checked) {
         const newValue = [...oldValue, value];
         setForm({ ...form, [name]: newValue });
@@ -187,19 +194,45 @@ function Container() {
         setForm({ ...form, [name]: newValue });
       }
     } else {
-      setForm({ ...form, [name]: value });
+      if (name == "adet") {
+        if (value === "" || (value > 0 && !isNaN(value))) {
+          setForm({ ...form, adet: value });
+        }
+      } else {
+        setForm({ ...form, [name]: value });
+      }
     }
+
+    
   }
+
+  
+
+  function handleSubmit() {}
 
   useEffect(() => {
     console.log(form);
   }, [form]);
 
-  function handleSubmit() {}
+  function increase() {
+    if (form.adet == "") {
+      setForm({ ...form, adet: 1 });
+    } else {
+      let newCount = parseInt(form.adet) + 1;
+      setForm({ ...form, adet: newCount });
+    }
+  }
 
-  function increase() {}
-
-  function decrease() {}
+  function decrease() {
+    if (form.adet == "") {
+      setForm({ ...form, adet: 1 });
+    } else {
+      let newCount = parseInt(form.adet) - 1;
+      if (newCount > 0) {
+        setForm({ ...form, adet: newCount });
+      }
+    }
+  }
 
   function hesapla() {}
 
@@ -227,7 +260,7 @@ function Container() {
 
       <DivItem>
         <InnerDiv>
-          <Select>Boyut Seç</Select>
+          <Select>Boyut Seç<Warning> *</Warning></Select>
           <FormGroup check>
             <Input
               id="kucuk"
@@ -270,7 +303,7 @@ function Container() {
         </InnerDiv>
 
         <InnerDiv>
-          <Select>Hamur Seç</Select>
+          <Select>Hamur Seç<Warning> *</Warning></Select>
           <FormGroup>
             <Input
               name="hamur"
@@ -289,12 +322,12 @@ function Container() {
       </DivItem>
       <Malzemeler>
         <Select>Ek Malzemeler</Select>
-        <Uyari>En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺</Uyari>
+        <Uyari>En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺<Warning> *</Warning></Uyari>
         <Ingredients malzemeler={form.malzemeler} changeFn={handleChange} />
       </Malzemeler>
 
       <SiparisSection>
-        <Select>İsim</Select>
+        <Select>İsim<Warning> *</Warning></Select>
         <FormGroup>
           <Input
             name="isim"
@@ -305,7 +338,7 @@ function Container() {
           <hr></hr>
         </FormGroup>
 
-        <Select>Sipariş Notu</Select>
+        <Select>Sipariş Notu<Warning> *</Warning></Select>
         <FormGroup>
           <Input
             name="not"
