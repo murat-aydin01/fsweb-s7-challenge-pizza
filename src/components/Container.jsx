@@ -171,8 +171,8 @@ const initForm = {
 const initErr = {
   isim: false,
   boyut: false,
+  hamur: false,
   malzemeler: false,
-  not: false,
 };
 
 function Container() {
@@ -182,10 +182,14 @@ function Container() {
 
   const [isValid, SetIsValid] = useState(false);
 
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+
   function handleChange(event) {
     const { value, name, type, checked } = event.target;
     let oldValue = form.malzemeler;
-    if (name == "malzemeler") {
+
+    if (type == "checkbox") {
       if (checked) {
         const newValue = [...oldValue, value];
         setForm({ ...form, [name]: newValue });
@@ -202,17 +206,34 @@ function Container() {
         setForm({ ...form, [name]: value });
       }
     }
-
     
   }
 
-  
+  function validate(form) {
+    const errors = {
+      isim: form.isim.length < 3,
+      boyut: !form.boyut,
+      hamur: !form.hamur,
+      malzemeler: form.malzemeler.length < 4 || form.malzemeler.length > 10,
+    };
+    setErr(errors)
+  }
 
   function handleSubmit() {}
 
   useEffect(() => {
-    console.log(form);
+    if (isFirstRender) {
+      setIsFirstRender(false);
+    } else {
+      validate(form);
+    }
+    console.log(form)
   }, [form]);
+  
+
+  useEffect(() => {
+    console.log(err);
+  }, [err]);
 
   function increase() {
     if (form.adet == "") {
@@ -260,7 +281,9 @@ function Container() {
 
       <DivItem>
         <InnerDiv>
-          <Select>Boyut Seç<Warning> *</Warning></Select>
+          <Select>
+            Boyut Seç<Warning> *</Warning>
+          </Select>
           <FormGroup check>
             <Input
               id="kucuk"
@@ -303,7 +326,9 @@ function Container() {
         </InnerDiv>
 
         <InnerDiv>
-          <Select>Hamur Seç<Warning> *</Warning></Select>
+          <Select>
+            Hamur Seç<Warning> *</Warning>
+          </Select>
           <FormGroup>
             <Input
               name="hamur"
@@ -322,12 +347,16 @@ function Container() {
       </DivItem>
       <Malzemeler>
         <Select>Ek Malzemeler</Select>
-        <Uyari>En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺<Warning> *</Warning></Uyari>
+        <Uyari>
+          En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺<Warning> *</Warning>
+        </Uyari>
         <Ingredients malzemeler={form.malzemeler} changeFn={handleChange} />
       </Malzemeler>
 
       <SiparisSection>
-        <Select>İsim<Warning> *</Warning></Select>
+        <Select>
+          İsim<Warning> *</Warning>
+        </Select>
         <FormGroup>
           <Input
             name="isim"
@@ -338,7 +367,9 @@ function Container() {
           <hr></hr>
         </FormGroup>
 
-        <Select>Sipariş Notu<Warning> *</Warning></Select>
+        <Select>
+          Sipariş Notu<Warning> *</Warning>
+        </Select>
         <FormGroup>
           <Input
             name="not"
