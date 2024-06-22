@@ -9,27 +9,43 @@ import {
   Label,
 } from "reactstrap";
 import styled from "styled-components";
-import Ingredients from "./Ingredients";
+import Ingredients, { ingredients } from "./Ingredients";
+import { useEffect, useState } from "react";
 
 const StyledForm = styled(Form)`
   width: 600px;
+  margin: 35px auto 0 auto;
   border: 1px solid black;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 35px;
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 50px;
 `;
+
 const DivItem = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border: 1px solid red;
   flex-wrap: wrap;
+  border: 1px solid red;
   row-gap: 35px;
+`;
+
+const Malzemeler = styled(DivItem)`
+  flex-direction: column;
+`;
+
+const PizzaBilgileri = styled(DivItem)`
+  align-items: center;
+  & > *:last-child {
+    flex-grow: 0;
+  }
+`;
+
+const SiparisSection = styled(DivItem)`
+  flex-direction: column;
+  align-items: stretch;
 `;
 
 const InnerDiv = styled.div`
@@ -37,41 +53,42 @@ const InnerDiv = styled.div`
   flex-direction: column;
 `;
 
+const SiparisCards = styled(InnerDiv)`
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
 const OrderName = styled.h2`
-  /* Position Absolute Acı Pizza */
-  font-weight: 600;
   font-size: 22px;
+  font-weight: 600;
   color: #292929;
 `;
 
 const Price = styled.h3`
-  /* 85.50₺ */
-  font-weight: 700;
   font-size: 28px;
+  font-weight: 700;
   color: #292929;
   flex-grow: 2;
 `;
 
 const Select = styled.h4`
-  /* Ek Malzemeler */
-  font-weight: 600;
   font-size: 20px;
+  font-weight: 600;
   line-height: 25px;
   color: #292929;
 `;
 
 const Span = styled.span`
-  /* 4.9 */
-  font-weight: 400;
   font-size: 1rem;
+  font-weight: 400;
   color: #5f5f5f;
   flex-grow: 1;
 `;
 
 const Paragraf = styled.p`
-  /* Frontent Dev olarak hala position:*/
-  font-weight: 400;
   font-size: 1rem;
+  font-weight: 400;
   color: #5f5f5f;
   line-height: 28.8px;
 `;
@@ -91,8 +108,8 @@ const Toplam = styled(Secimler)`
 `;
 
 const CounterInput = styled(Input)`
-  text-align: center;
   max-width: 50px;
+  text-align: center;
   -moz-appearance: textfield; /* Firefox */
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -102,38 +119,90 @@ const CounterInput = styled(Input)`
 `;
 
 const StyledCard = styled(Card)`
-min-width:386px;
-height:255px;
-`
+  min-width: 386px;
+  height: 255px;
+`;
 
 const SiparisButton = styled(Button)`
+  width: 100%;
+  height: 62px;
+  line-height: 56px;
   background-color: #fdc913;
   font-size: 18px;
   font-weight: 600;
-  line-height: 56px;
-  height:62px;
-  width:100%;
 `;
 
 const CounterButton = styled(Button)`
-background-color: #fdc913;
-width:47px;
-`
+  width: 47px;
+  background-color: #fdc913;
+`;
 
 const CounterGroup = styled(InputGroup)`
-height:56px;
-width:140px;
-`
+  height: 56px;
+  width: 140px;
+`;
 
 const StyledCardBody = styled(CardBody)`
-display:flex;
-flex-direction:column;
-justify-content:space-around;
-padding:40px;
-box-sizing:content-box;
-`
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: content-box;
+`;
+
+const initForm = {
+  isim: "",
+  boyut: "",
+  hamur: "",
+  malzemeler: [],
+  adet: 1,
+  ekFiyat: 0,
+  toplamFiyat: 0,
+  not: "",
+};
+
+const initErr = {
+  isim: false,
+  boyut: false,
+  malzemeler: false,
+  not: false,
+};
 
 function Container() {
+  const [form, setForm] = useState(initForm);
+
+  const [err, setErr] = useState(initErr);
+
+  const [isValid, SetIsValid] = useState(false);
+
+  function handleChange(event) {
+    const { value, name, type, checked } = event.target;
+    let oldValue = form.malzemeler;
+    if (type == "checkbox") {
+      if (checked) {
+        const newValue = [...oldValue, value];
+        setForm({ ...form, [name]: newValue });
+      } else {
+        const newValue = oldValue.filter((v) => v !== value);
+        setForm({ ...form, [name]: newValue });
+      }
+    } else {
+      setForm({ ...form, [name]: value });
+    }
+  }
+
+  useEffect(() => {
+    console.log(form);
+  }, [form]);
+
+  function handleSubmit() {}
+
+  function increase() {}
+
+  function decrease() {}
+
+  function hesapla() {}
+
   return (
     <StyledForm>
       <DivItem>
@@ -141,11 +210,11 @@ function Container() {
       </DivItem>
 
       <DivItem>
-        <DivItem style={{ alignItems: "center" }}>
+        <PizzaBilgileri>
           <Price>85.50₺</Price>
           <Span>4.9</Span>
-          <Span style={{ flexGrow: 0 }}>(200)</Span>
-        </DivItem>
+          <Span>(200)</Span>
+        </PizzaBilgileri>
         <Paragraf>
           Frontent Dev olarak hala position:absolute kullanıyorsan bu çok acı
           pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli
@@ -160,19 +229,40 @@ function Container() {
         <InnerDiv>
           <Select>Boyut Seç</Select>
           <FormGroup check>
-            <Input id="kucuk" name="kucuk" type="radio" />
+            <Input
+              id="kucuk"
+              name="boyut"
+              value="Küçük"
+              checked={form.boyut == "Küçük"}
+              onChange={handleChange}
+              type="radio"
+            />
             <Label for="kucuk" check>
               Küçük
             </Label>
           </FormGroup>
           <FormGroup check>
-            <Input id="orta" name="orta" type="radio" />
+            <Input
+              id="orta"
+              name="boyut"
+              value="Orta"
+              checked={form.boyut == "Orta"}
+              onChange={handleChange}
+              type="radio"
+            />
             <Label check for="orta">
               Orta
             </Label>
           </FormGroup>
           <FormGroup check>
-            <Input id="buyuk" name="buyuk" type="radio" />
+            <Input
+              id="buyuk"
+              name="boyut"
+              value="Büyük"
+              checked={form.boyut == "Büyük"}
+              onChange={handleChange}
+              type="radio"
+            />
             <Label for="buyuk" check>
               Büyük
             </Label>
@@ -182,55 +272,81 @@ function Container() {
         <InnerDiv>
           <Select>Hamur Seç</Select>
           <FormGroup>
-            <Input id="hamurSec" name="hamurSec" type="select">
-              <option>Klasik</option>
-              <option>ince</option>
+            <Input
+              name="hamur"
+              value={form.hamur}
+              onChange={handleChange}
+              type="select"
+            >
+              <option value="" style={{ display: "none" }}>
+                Seçiniz
+              </option>
+              <option value="klasik">Klasik</option>
+              <option value="ince">ince</option>
             </Input>
           </FormGroup>
         </InnerDiv>
       </DivItem>
-      <DivItem style={{ flexDirection: "column" }}>
+      <Malzemeler>
         <Select>Ek Malzemeler</Select>
         <Uyari>En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺</Uyari>
-        <Ingredients />
-      </DivItem>
+        <Ingredients malzemeler={form.malzemeler} changeFn={handleChange} />
+      </Malzemeler>
 
-      <DivItem style={{ flexDirection: "column", alignItems: "stretch" }}>
-        <Select>Sipariş Notu</Select>
+      <SiparisSection>
+        <Select>İsim</Select>
         <FormGroup>
-          <Label for="exampleText">Text Area</Label>
-          <Input id="exampleText" name="text" type="textarea" />
+          <Input
+            name="isim"
+            type="input"
+            value={form.isim}
+            onChange={handleChange}
+          />
           <hr></hr>
         </FormGroup>
-        <InnerDiv
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-          }}
-        >
+
+        <Select>Sipariş Notu</Select>
+        <FormGroup>
+          <Input
+            name="not"
+            type="textarea"
+            value={form.not}
+            onChange={handleChange}
+          />
+          <hr></hr>
+        </FormGroup>
+        <SiparisCards>
           <CounterGroup>
-            <CounterButton>-</CounterButton>
-            <CounterInput type="number"  />
-            <CounterButton>+</CounterButton>
+            <CounterButton type="button" onClick={decrease}>
+              -
+            </CounterButton>
+            <CounterInput
+              type="number"
+              name="adet"
+              value={form.adet}
+              onChange={handleChange}
+            />
+            <CounterButton type="button" onClick={increase}>
+              +
+            </CounterButton>
           </CounterGroup>
 
           <StyledCard>
-            <StyledCardBody style={{display:"flex",flexDirection:"column",justifyContent:"space-around"}}>
+            <StyledCardBody>
               <Select>Sipariş Toplamı</Select>
               <DivItem>
                 <Secimler>Seçimler</Secimler>
-                <Secimler>25.00₺</Secimler>
+                <Secimler>{form.ekFiyat}₺</Secimler>
               </DivItem>
               <DivItem>
                 <Toplam>Toplam</Toplam>
-                <Toplam>110.50₺</Toplam>
+                <Toplam>{form.toplamFiyat}₺</Toplam>
               </DivItem>
             </StyledCardBody>
-            <SiparisButton>SİPARİŞ VER</SiparisButton>
+            <SiparisButton onClick={handleSubmit}>SİPARİŞ VER</SiparisButton>
           </StyledCard>
-        </InnerDiv>
-      </DivItem>
+        </SiparisCards>
+      </SiparisSection>
     </StyledForm>
   );
 }

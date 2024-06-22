@@ -1,6 +1,6 @@
 import { Col, FormGroup, Input, Label, Row } from "reactstrap";
 
-const ingredients = [
+export const ingredients = [
     "Pepperoni",
     "Tavuk Izgara",
     "Mısır",
@@ -16,15 +16,21 @@ const ingredients = [
     "Jalepeno",
     "Sucuk(Acı)"
   ];
-function Ingredients() {
+function Ingredients(props) {
+  const {changeFn, malzemeler} = props;
   return (
+    
     <Row>
       {ingredients.map((item, index) => (
         <Col sm="4" key={index}>
           <FormGroup check>
             <Input
               id={item}
+              value={item}
               type="checkbox"
+              name="malzemeler"
+              checked={malzemeler.includes(item)}
+              onChange={changeFn}
             />
             {' '}
             <Label check for={item}>
