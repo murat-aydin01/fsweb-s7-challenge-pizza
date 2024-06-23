@@ -11,6 +11,7 @@ import {
 import styled from "styled-components";
 import Ingredients, { ingredients } from "./Ingredients";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const StyledForm = styled(Form)`
   width: 600px;
@@ -182,13 +183,10 @@ function Container() {
 
   const [isValid, SetIsValid] = useState(false);
 
-  const [isFirstRender, setIsFirstRender] = useState(true);
-
 
   function handleChange(event) {
     const { value, name, type, checked } = event.target;
     let oldValue = form.malzemeler;
-
     if (type == "checkbox") {
       if (checked) {
         const newValue = [...oldValue, value];
@@ -206,7 +204,6 @@ function Container() {
         setForm({ ...form, [name]: value });
       }
     }
-    
   }
 
   function validate(form) {
@@ -216,22 +213,29 @@ function Container() {
       hamur: !form.hamur,
       malzemeler: form.malzemeler.length < 4 || form.malzemeler.length > 10,
     };
-    setErr(errors)
+    setErr(errors);
   }
 
-  function handleSubmit() {}
-
-  useEffect(() => {
-    if (isFirstRender) {
-      setIsFirstRender(false);
-    } else {
-      validate(form);
+  function handleSubmit(event) {
+    event.preventDefault()
+    if(!isValid){
+      return
     }
-    console.log(form)
-  }, [form]);
-  
+
+    axios
+      .post("https://reqres.in/api/pizza", form)
+      .then((response)=>console.log("SİPARİŞ ÖZETİ:", response.data))
+      .catch((err)=>console.log("HATA OLUŞTU:", err))
+  }
 
   useEffect(() => {
+    validate(form);
+    
+    console.log(form);
+  }, [form]);
+
+  useEffect(() => {
+    SetIsValid(Object.values(err).every((val) => val === false));
     console.log(err);
   }, [err]);
 
@@ -255,10 +259,18 @@ function Container() {
     }
   }
 
-  function hesapla() {}
+  useEffect(() => {
+    hesapla();
+  }, [form.malzemeler, form.adet]);
+
+  function hesapla() {
+    let ekFiyat = form.malzemeler.length*5;
+    let toplamFiyat = (ekFiyat+85.5)*form.adet;
+    setForm({...form, ekFiyat:ekFiyat, toplamFiyat:toplamFiyat})
+  }
 
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit}>
       <DivItem>
         <OrderName>Position Absolute Acı Pizza</OrderName>
       </DivItem>
@@ -282,7 +294,7 @@ function Container() {
       <DivItem>
         <InnerDiv>
           <Select>
-            Boyut Seç<Warning> *</Warning>
+            Boyut Seç{err.boyut&&<Warning> *</Warning>}
           </Select>
           <FormGroup check>
             <Input
@@ -327,7 +339,7 @@ function Container() {
 
         <InnerDiv>
           <Select>
-            Hamur Seç<Warning> *</Warning>
+            Hamur Seç{err.hamur && <Warning> *</Warning>}
           </Select>
           <FormGroup>
             <Input
@@ -348,14 +360,14 @@ function Container() {
       <Malzemeler>
         <Select>Ek Malzemeler</Select>
         <Uyari>
-          En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺<Warning> *</Warning>
+          En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺{err.malzemeler&&<Warning> *</Warning>}
         </Uyari>
         <Ingredients malzemeler={form.malzemeler} changeFn={handleChange} />
       </Malzemeler>
 
       <SiparisSection>
         <Select>
-          İsim<Warning> *</Warning>
+          İsim{err.isim&&<Warning> *</Warning>}
         </Select>
         <FormGroup>
           <Input
@@ -407,7 +419,7 @@ function Container() {
                 <Toplam>{form.toplamFiyat}₺</Toplam>
               </DivItem>
             </StyledCardBody>
-            <SiparisButton onClick={handleSubmit}>SİPARİŞ VER</SiparisButton>
+            <SiparisButton disabled={!isValid} >SİPARİŞ VER</SiparisButton>
           </StyledCard>
         </SiparisCards>
       </SiparisSection>
