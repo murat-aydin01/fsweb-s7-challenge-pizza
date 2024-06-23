@@ -7,7 +7,7 @@ import Container from "../components/Container"
 function Order() {
   return (
     <>
-    <Header/>
+    
     <Container/>
     </>
   )
