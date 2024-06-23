@@ -9,6 +9,7 @@ import Home from "./pages/Home.jsx";
 function App() {
   return (
     <>
+    <Header></Header>
       <Switch>
         <Route path="/order">
           <Order />
