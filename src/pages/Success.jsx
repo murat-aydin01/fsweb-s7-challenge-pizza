@@ -1,8 +1,10 @@
 import React from 'react'
+import SuccessComp from "../components/SuccessComp"
+
 
 function Success() {
   return (
-    <div>Success</div>
+    <SuccessComp ></SuccessComp>
   )
 }
 
