@@ -1,22 +1,14 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Input,
-  InputGroup,
-  Label,
-} from "reactstrap";
+import { Button, Form, FormGroup, Input, InputGroup, Label } from "reactstrap";
 import styled from "styled-components";
-import Ingredients, { ingredients } from "./Ingredients";
+import Ingredients from "./Ingredients";
+import StyledCard from "./StyledCard";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const StyledForm = styled(Form)`
   width: 600px;
   margin: 35px auto 0 auto;
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,7 +21,6 @@ const DivItem = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   flex-wrap: wrap;
-  border: 1px solid red;
   row-gap: 35px;
 `;
 
@@ -106,15 +97,6 @@ const Uyari = styled.p`
   font-weight: 500;
 `;
 
-const Secimler = styled.p`
-  font-size: 18px;
-  font-weight: 600;
-`;
-
-const Toplam = styled(Secimler)`
-  color: #ce2829;
-`;
-
 const CounterInput = styled(Input)`
   max-width: 50px;
   text-align: center;
@@ -126,20 +108,6 @@ const CounterInput = styled(Input)`
   }
 `;
 
-const StyledCard = styled(Card)`
-  min-width: 386px;
-  height: 255px;
-`;
-
-const SiparisButton = styled(Button)`
-  width: 100%;
-  height: 62px;
-  line-height: 56px;
-  background-color: #fdc913;
-  font-size: 18px;
-  font-weight: 600;
-`;
-
 const CounterButton = styled(Button)`
   width: 47px;
   background-color: #fdc913;
@@ -148,14 +116,6 @@ const CounterButton = styled(Button)`
 const CounterGroup = styled(InputGroup)`
   height: 56px;
   width: 140px;
-`;
-
-const StyledCardBody = styled(CardBody)`
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  box-sizing: content-box;
 `;
 
 const initForm = {
@@ -183,6 +143,7 @@ function Container() {
 
   const [isValid, SetIsValid] = useState(false);
 
+  let history = useHistory();
 
   function handleChange(event) {
     const { value, name, type, checked } = event.target;
@@ -217,20 +178,23 @@ function Container() {
   }
 
   function handleSubmit(event) {
-    event.preventDefault()
-    if(!isValid){
-      return
+    event.preventDefault();
+    if (!isValid) {
+      return;
     }
 
     axios
       .post("https://reqres.in/api/pizza", form)
-      .then((response)=>console.log("SİPARİŞ ÖZETİ:", response.data))
-      .catch((err)=>console.log("HATA OLUŞTU:", err))
+      .then((response) => {
+        console.log("SİPARİŞ ÖZETİ:", response.data);
+        history.push("/success", { response: response.data });
+      })
+      .catch((err) => console.log("HATA OLUŞTU:", err));
   }
 
   useEffect(() => {
     validate(form);
-    
+
     console.log(form);
   }, [form]);
 
@@ -264,9 +228,9 @@ function Container() {
   }, [form.malzemeler, form.adet]);
 
   function hesapla() {
-    let ekFiyat = form.malzemeler.length*5;
-    let toplamFiyat = (ekFiyat+85.5)*form.adet;
-    setForm({...form, ekFiyat:ekFiyat, toplamFiyat:toplamFiyat})
+    let ekFiyat = form.malzemeler.length * 5;
+    let toplamFiyat = (ekFiyat + 85.5) * form.adet;
+    setForm({ ...form, ekFiyat: ekFiyat, toplamFiyat: toplamFiyat });
   }
 
   return (
@@ -293,9 +257,7 @@ function Container() {
 
       <DivItem>
         <InnerDiv>
-          <Select>
-            Boyut Seç{err.boyut&&<Warning> *</Warning>}
-          </Select>
+          <Select>Boyut Seç{err.boyut && <Warning> *</Warning>}</Select>
           <FormGroup check>
             <Input
               id="kucuk"
@@ -338,9 +300,7 @@ function Container() {
         </InnerDiv>
 
         <InnerDiv>
-          <Select>
-            Hamur Seç{err.hamur && <Warning> *</Warning>}
-          </Select>
+          <Select>Hamur Seç{err.hamur && <Warning> *</Warning>}</Select>
           <FormGroup>
             <Input
               name="hamur"
@@ -360,37 +320,36 @@ function Container() {
       <Malzemeler>
         <Select>Ek Malzemeler</Select>
         <Uyari>
-          En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺{err.malzemeler&&<Warning> *</Warning>}
+          En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺
+          {err.malzemeler && <Warning> *</Warning>}
         </Uyari>
         <Ingredients malzemeler={form.malzemeler} changeFn={handleChange} />
       </Malzemeler>
 
       <SiparisSection>
-        <Select>
-          İsim{err.isim&&<Warning> *</Warning>}
-        </Select>
-        <FormGroup>
-          <Input
-            name="isim"
-            type="input"
-            value={form.isim}
-            onChange={handleChange}
-          />
-          <hr></hr>
-        </FormGroup>
+        <InnerDiv>
+          <Select>İsim{err.isim && <Warning> *</Warning>}</Select>
+          <FormGroup>
+            <Input
+              name="isim"
+              type="input"
+              value={form.isim}
+              onChange={handleChange}
+            />
+            <hr></hr>
+          </FormGroup>
 
-        <Select>
-          Sipariş Notu<Warning> *</Warning>
-        </Select>
-        <FormGroup>
-          <Input
-            name="not"
-            type="textarea"
-            value={form.not}
-            onChange={handleChange}
-          />
-          <hr></hr>
-        </FormGroup>
+          <Select>Sipariş Notu</Select>
+          <FormGroup>
+            <Input
+              name="not"
+              type="textarea"
+              value={form.not}
+              onChange={handleChange}
+            />
+          </FormGroup>
+        </InnerDiv>
+        <hr></hr>
         <SiparisCards>
           <CounterGroup>
             <CounterButton type="button" onClick={decrease}>
@@ -407,20 +366,12 @@ function Container() {
             </CounterButton>
           </CounterGroup>
 
-          <StyledCard>
-            <StyledCardBody>
-              <Select>Sipariş Toplamı</Select>
-              <DivItem>
-                <Secimler>Seçimler</Secimler>
-                <Secimler>{form.ekFiyat}₺</Secimler>
-              </DivItem>
-              <DivItem>
-                <Toplam>Toplam</Toplam>
-                <Toplam>{form.toplamFiyat}₺</Toplam>
-              </DivItem>
-            </StyledCardBody>
-            <SiparisButton disabled={!isValid} >SİPARİŞ VER</SiparisButton>
-          </StyledCard>
+          <StyledCard
+            ekFiyat={form.ekFiyat}
+            toplamFiyat={form.toplamFiyat}
+            showOrderButton={true}
+            isValid={isValid}
+          ></StyledCard>
         </SiparisCards>
       </SiparisSection>
     </StyledForm>
