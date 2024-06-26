@@ -257,7 +257,7 @@ function Container() {
 
       <DivItem>
         <InnerDiv>
-          <Select>Boyut Seç{err.boyut && <Warning> *</Warning>}</Select>
+          <Select>Boyut Seç{err.boyut && <Warning className="test-size-warn"> *</Warning>}</Select>
           <FormGroup check>
             <Input
               id="kucuk"
@@ -279,6 +279,7 @@ function Container() {
               checked={form.boyut == "Orta"}
               onChange={handleChange}
               type="radio"
+              className="test-size-radio"
             />
             <Label check for="orta">
               Orta
@@ -300,13 +301,14 @@ function Container() {
         </InnerDiv>
 
         <InnerDiv>
-          <Select>Hamur Seç{err.hamur && <Warning> *</Warning>}</Select>
+          <Select>Hamur Seç{err.hamur && <Warning className="test-dough-warn"> *</Warning>}</Select>
           <FormGroup>
             <Input
               name="hamur"
               value={form.hamur}
               onChange={handleChange}
               type="select"
+              className="test-dough-select"
             >
               <option value="" style={{ display: "none" }}>
                 Seçiniz
@@ -321,14 +323,14 @@ function Container() {
         <Select>Ek Malzemeler</Select>
         <Uyari>
           En az 4 en fazla 10 malzeme seçebilirsiniz. 5₺
-          {err.malzemeler && <Warning> *</Warning>}
+          {err.malzemeler && <Warning className="test-ingredient-warn"> *</Warning>}
         </Uyari>
         <Ingredients malzemeler={form.malzemeler} changeFn={handleChange} />
       </Malzemeler>
 
       <SiparisSection>
         <InnerDiv>
-          <Select>İsim{err.isim && <Warning> *</Warning>}</Select>
+          <Select>İsim{err.isim && <Warning className="test-name-warn"> *</Warning>}</Select>
           <FormGroup>
             <Input
               name="isim"
@@ -361,7 +363,7 @@ function Container() {
               value={form.adet}
               onChange={handleChange}
             />
-            <CounterButton type="button" onClick={increase}>
+            <CounterButton className="test-artir" type="button" onClick={increase}>
               +
             </CounterButton>
           </CounterGroup>
