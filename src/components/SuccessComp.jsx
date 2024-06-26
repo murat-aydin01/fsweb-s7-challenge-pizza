@@ -57,6 +57,20 @@ const Value = styled(Key)`
 font-weight:700;
 `
 
+const Ozet = styled.div`
+width: 200px;
+display:flex;
+flex-direction:column;
+row-gap:1rem;
+margin:auto 50px;
+`
+const Satir = styled.div`
+width:100%;
+display:flex;
+flex-wrap:wrap;
+justify-content:space-between;
+
+`
 
 const SiparisCard = styled(StyledCard)`
 &&& {
@@ -86,12 +100,20 @@ function SuccessComp() {
         <Alindi>siparişin alındı</Alindi>
         <StyledHr />
         <Urun>Position Absolute Acı Pizza</Urun>
+        <Ozet>
+        <Satir>
         <Key>Boyut: </Key>
         <Value>{response.boyut}</Value>
+        </Satir>
+        <Satir>
         <Key>Hamur: </Key>
         <Value>{response.hamur}</Value>
+        </Satir>
+        <Satir>
         <Key>Ek Malzemeler: </Key>
         <Value>{response.malzemeler.join(', ')}</Value>
+        </Satir>
+        </Ozet>
         <SiparisCard className={"yenikart"} ekFiyat={response.ekFiyat} toplamFiyat={response.toplamFiyat} showOrderButton={false}></SiparisCard>
 
     </SuccessDiv>
