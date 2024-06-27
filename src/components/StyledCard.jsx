@@ -56,14 +56,14 @@ function StyledCard({ ekFiyat, toplamFiyat, showOrderButton, isValid, className}
         <Select>Sipariş Toplamı</Select>
         <DivItem>
           <Secimler>Seçimler</Secimler>
-          <Secimler className="test-ekFiyat">{ekFiyat}₺</Secimler>
+          <Secimler data-cy="ekFiyat">{ekFiyat}₺</Secimler>
         </DivItem>
         <DivItem>
           <Toplam>Toplam</Toplam>
-          <Toplam className="test-toplamFiyat">{toplamFiyat}₺</Toplam>
+          <Toplam data-cy="toplamFiyat">{toplamFiyat}₺</Toplam>
         </DivItem>
       </StyledCardBody>
-      {showOrderButton && <SiparisButton className="test-submit-button" disabled={!isValid}>SİPARİŞ VER</SiparisButton>}
+      {showOrderButton && <SiparisButton data-cy="submit-button" disabled={!isValid}>SİPARİŞ VER</SiparisButton>}
     </StyledCardWrapper>
   );
 }

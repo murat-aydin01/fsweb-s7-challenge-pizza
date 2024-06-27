@@ -74,7 +74,7 @@ export default function HomeComp() {
         <span> PİZZA DOYURUR</span>
       </Baslik>
       <SiparisButonDiv>
-        <SiparisButon className="test-aciktim-button" type="button" onClick={handleClick}>
+        <SiparisButon data-cy="aciktim-button" type="button" onClick={handleClick}>
           ACIKTIM
         </SiparisButon>
       </SiparisButonDiv>

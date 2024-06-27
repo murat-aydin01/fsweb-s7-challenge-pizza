@@ -31,7 +31,7 @@ function Ingredients(props) {
               name="malzemeler"
               checked={malzemeler.includes(item)}
               onChange={changeFn}
-              className="test-ingredient-checkbox"
+              data-cy="ingredient-checkbox"
             />
             {' '}
             <Label check for={item}>
