@@ -79,11 +79,11 @@ const SiparisCard = styled(StyledCard)`
     border: 1px solid white;
 
     h4 {
-      color: white; // Select stilini override edin
+      color: white; 
     }
 
     p {
-      color: white; // Secimler ve Toplam stilini override edin
+      color: white; 
     }
   }
 `
@@ -92,7 +92,7 @@ function SuccessComp() {
     const location = useLocation();
     const response = location.state?.response;
     if (!response) {
-        return <div>Loading...</div>; // veya uygun bir loading state
+        return <div>Loading...</div>; 
       }
   return (
     <SuccessDiv>

@@ -1,6 +1,5 @@
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-
 const HomePage = styled.div`
   font-family: "Barlow";
   display: flex;
@@ -11,7 +10,7 @@ const HomePage = styled.div`
   height: 80vh;
   margin: 0;
   padding: 0;
-  background-image: url("Assets/mile1-assets/home-banner.png");
+  background-image: url("/home-banner.png");
   background-size: cover;
   background-position: center;
 `;
